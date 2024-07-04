@@ -63,7 +63,7 @@ input[type="file"] {
     flex: 1;
 }
 
-#selecao-voz-box select{
+#selecao-voz{
     width: 100%;
 }
 
