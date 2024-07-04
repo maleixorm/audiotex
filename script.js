@@ -1,8 +1,9 @@
 // Selecionando os elementos do HTML
 const selecaoVoz = document.querySelector("#selecao-voz");
-const entradaTexto = document.querySelector("#entrada-texto");
+const entradaTexto = document.querySelector("#entrada-de-texto");
 const botaoOuvir = document.querySelector("#ouvir-btn");
 const botaoBaixarTexto = document.querySelector("#baixar-texto-btn");
+const botaoBaixarAudio = document.querySelector("#baixar-audio-btn");
 const uploadArquivo = document.querySelector("#upload-arquivo");
 
 // Iniciando a API de vozes
@@ -22,3 +23,48 @@ const atualizarValores = () => {
 };
 
 window.speechSynthesis.onvoiceschanged = atualizarValores;
+
+// Executar o texto como voz
+selecaoVoz.addEventListener("change", () => {
+    fala.voice = vozesDisponiveis[selecaoVoz.value]
+});
+
+botaoOuvir.addEventListener("click", () => {
+    fala.text = entradaTexto.value;
+    window.speechSynthesis.speak(fala);
+});
+
+// Baixar texto em arquivo
+botaoBaixarTexto.addEventListener("click", () => {
+    const texto = entradaTexto.value;
+    const blob = new Blob([texto], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "texto.txt";
+    a.click();
+    URL.revokeObjectURL(url);
+});
+
+botaoBaixarAudio.addEventListener("click", () => {
+    fala.text = entradaTexto.value;
+    const audio = new Audio(window.speechSynthesis.speak(fala));
+    const url = URL.createObjectURL(audio);
+    const b = document.createElement("b");
+    b.href = url;
+    b.download = "audio.mp3"
+    b.click();
+    URL.revokeObjectURL(url);
+});
+
+// Enviando o arquivo para ser lido
+uploadArquivo.addEventListener("change", (event) => {
+    const arquivo = event.target.files[0];
+    if (arquivo) {
+        const leitor = new FileReader();
+        leitor.onload = (e) => {
+            entradaTexto.value = e.target.result;
+        }
+        leitor.readAsText(arquivo);
+    }
+});
