@@ -46,16 +46,6 @@ botaoBaixarTexto.addEventListener("click", () => {
     URL.revokeObjectURL(url);
 });
 
-botaoBaixarAudio.addEventListener("click", () => {
-    fala.text = entradaTexto.value;
-    const audio = new Audio(window.speechSynthesis.speak(fala));
-    const url = URL.createObjectURL(audio);
-    const b = document.createElement("b");
-    b.href = url;
-    b.download = "audio.mp3"
-    b.click();
-    URL.revokeObjectURL(url);
-});
 
 // Enviando o arquivo para ser lido
 uploadArquivo.addEventListener("change", (event) => {
